@@ -1,0 +1,15 @@
+﻿# Node / Angular
+node_modules/
+dist/
+.angular/
+tmp/
+coverage/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.iml

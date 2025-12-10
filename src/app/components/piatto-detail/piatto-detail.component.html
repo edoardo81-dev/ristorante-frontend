@@ -1,0 +1,30 @@
+<div *ngIf="piatto; else noData">
+  <div class="row">
+    <div class="col-md-4">
+      <img *ngIf="piatto.immagine" [src]="'assets/img/' + piatto.immagine" class="img-fluid" alt="{{piatto.nome}}">
+    </div>
+    <div class="col-md-8">
+      <h3>{{ piatto.nome }}</h3>
+      <p><strong>Categoria:</strong> {{ piatto.categoria }}</p>
+      <p><strong>Prezzo:</strong> €{{ piatto.prezzo | number:'1.2-2' }}</p>
+
+      <h5>Ingredienti</h5>
+      <ul>
+        <li *ngFor="let ing of (piatto.ingredienti || [])">{{ ing }}</li>
+      </ul>
+
+      <div class="d-flex gap-2">
+<a
+  class="btn btn-primary btn-sm"
+  [routerLink]="['/piatti', categoria || 'Primi']"
+>
+  Torna indietro
+</a>
+</div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <p>Piatto non trovato.</p>
+</ng-template>

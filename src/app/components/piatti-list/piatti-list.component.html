@@ -1,0 +1,28 @@
+<h2>Piatti - {{ categoria }}</h2>
+
+<div *ngIf="piatti.length === 0">Nessun piatto trovato per questa categoria.</div>
+
+<div class="row g-3">
+  <div class="col-md-6 col-lg-4" *ngFor="let p of piatti">
+    <div class="card h-100">
+      <!-- Contenitore immagine a dimensione uniforme -->
+      <div class="thumb-wrap" *ngIf="p.immagine">
+        <img [src]="'assets/img/' + p.immagine" [alt]="p.nome">
+      </div>
+
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title">{{ p.nome }}</h5>
+        <p class="card-text mb-1">Prezzo: €{{ p.prezzo | number:'1.2-2' }}</p>
+        <div class="mt-auto">
+          <a
+            class="btn btn-primary btn-sm"
+            [routerLink]="['/piatto', p.id]"
+            [queryParams]="{ categoria: categoria }"
+          >
+            Dettagli
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,112 @@
+/* altezza piena per far vedere lo sfondo */
+html, body, app-root { height: 100%; }
+body { margin: 0; }
+
+/* =========== TEMI SFONDO =========== */
+
+/* Latte (chiaro caldo) */
+.theme-latte {
+  --bg-1: #eeb366;  /* base panna */
+  --bg-2: #f7efe6;  /* leggermente più scuro */
+  --bg-3: rgba(0, 0, 0, .02); /* grana leggerissima */
+
+  background:
+    radial-gradient(1200px 800px at 20% 10%, var(--bg-2), transparent 70%),
+    radial-gradient(1400px 900px at 80% 90%, var(--bg-2), transparent 70%),
+    linear-gradient(var(--bg-1), var(--bg-1)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2px,
+      var(--bg-3) 2px 3px
+    ) !important;
+  color: #2a2a2a;
+}
+
+/* Salvia (verde molto tenue) */
+.theme-salvia {
+  --bg-1: #f3f7f4;
+  --bg-2: #eaf3ee;
+  --bg-3: rgba(13, 71, 50, .02);
+
+  background:
+    radial-gradient(1200px 800px at 15% 15%, var(--bg-2), transparent 70%),
+    radial-gradient(1200px 800px at 85% 85%, var(--bg-2), transparent 70%),
+    linear-gradient(var(--bg-1), var(--bg-1)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2px,
+      var(--bg-3) 2px 3px
+    ) !important;
+  color: #1f2e26;
+}
+
+/* Toscana (sabbia/terracotta delicata) */
+.theme-toscana {
+  --bg-1: #f8f3ea;
+  --bg-2: #f2e7d5;
+  --bg-3: rgba(128, 64, 0, .02);
+
+  background:
+    radial-gradient(1200px 800px at 20% 80%, var(--bg-2), transparent 70%),
+    radial-gradient(1400px 900px at 80% 20%, var(--bg-2), transparent 70%),
+    linear-gradient(var(--bg-1), var(--bg-1)),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2px,
+      var(--bg-3) 2px 3px
+    ) !important;
+  color: #2b2b2b;
+}
+
+/* opzionale: ombre leggere per card, restano neutre sopra il nuovo bg */
+.card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 .125rem .35rem rgba(0,0,0,.06);
+  border-radius: 12px;
+}
+/* usa questa classe sul wrapper dei bottoni per togliere il riquadro bianco */
+.card-ghost {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* pulizia globale bottoni */
+.btn {
+  box-shadow: none !important;
+}
+.btn:focus, .btn:active {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* opzionale: rendi il primary un po’ più “flat” */
+.btn-primary { border: none; }
+
+/* --- Thumbnails uniformi 16:9 dentro le card --- */
+.thumb-wrap {
+  position: relative;
+  aspect-ratio: 16 / 9;   /* tutte con lo stesso rapporto */
+  overflow: hidden;
+  border-top-left-radius: 12px;   /* allinea al radius della .card */
+  border-top-right-radius: 12px;
+}
+
+.thumb-wrap img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;      /* riempie e ritaglia */
+  object-position: center;
+}
+
+/* opzionale: alza di poco l’ombra delle card per valorizzare le foto */
+.card {
+  box-shadow: 0 .25rem .75rem rgba(0,0,0,.08);
+}
+ /* stile dei bottoni primari: blu con hover più scuro */
+.btn-primary { border: none; }
+.btn-primary:hover { filter: brightness(0.92); }   /* un po' più scuro al passaggio */
+.btn-primary:active { filter: brightness(0.88); }  /* ancora più scuro al click */

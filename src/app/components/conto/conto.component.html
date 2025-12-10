@@ -1,0 +1,51 @@
+<h2>Calcola il conto del tuo pasto</h2>
+
+<div class="mb-3 row g-2 align-items-end">
+  <div class="col-auto">
+    <label class="form-label">Piatto</label>
+    <select class="form-select" [(ngModel)]="selectedPiatto">
+      <option [ngValue]="undefined">-- seleziona --</option>
+      <option *ngFor="let p of piatti" [ngValue]="p">{{ p.nome }} - €{{ p.prezzo }}</option>
+    </select>
+  </div>
+
+  <div class="col-auto">
+    <label class="form-label">Quantità</label>
+    <input type="number" class="form-control" [(ngModel)]="qty" min="1">
+  </div>
+
+  <div class="col-auto">
+    <button class="btn btn-primary" (click)="addSelected()">Aggiungi</button>
+  </div>
+</div>
+
+<hr>
+
+<h4>Elementi nel conto</h4>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Nome</th>
+      <th>Prezzo</th>
+      <th>Quantità</th>
+      <th>Totale</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let it of items">
+      <td>{{ it.piatto.nome }}</td>
+      <td>€{{ it.piatto.prezzo | number:'1.2-2' }}</td>
+      <td>
+        <input type="number" class="form-control" [value]="it.quantity" (change)="updateQuantity(it,$event)" min="0">
+      </td>
+      <td>€{{ (it.piatto.prezzo * it.quantity) | number:'1.2-2' }}</td>
+      <td><button class="btn btn-sm btn-danger" (click)="remove(it)">Rimuovi</button></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between align-items-center">
+  <button class="btn btn-outline-danger" (click)="clear()">Svuota conto</button>
+  <h4>Totale: €{{ total | number:'1.2-2' }}</h4>
+</div>
