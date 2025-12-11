@@ -1,59 +1,87 @@
-# RistoranteClient
+# Ristorante – Frontend (Angular)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.2.
+Interfaccia utente del menù ristorante. Consuma le API REST del backend Spring Boot.
 
-## Development server
+## Stack
+- Angular 17/20 (standalone components)
+- Bootstrap 5
+- RxJS/HttpClient
 
-To start a local development server, run:
+## Funzionalità
+- Home con categorie (Primi, Secondi, Dolci, Bevande)
+- Lista piatti per categoria
+- Dettaglio piatto con ingredienti
+- Form “conto” (carrello leggero) con piatti ordinati per categoria → nome
+- Tema grafico con sfondo personalizzato e card uniformi
 
-```bash
-ng serve
-```
+## Requisiti
+- Node.js 18+
+- Angular CLI
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Configurazione API
+Per lo sviluppo locale, il servizio punta al backend su `http://localhost:8080`.
 
-## Code scaffolding
+File: `src/app/services/piatto.service.ts`
+```ts
+private baseUrl = 'http://localhost:8080/api/piatti';
+// Dopo il deploy del backend su Render, sostituisci con l'URL pubblico, es.:
+// private baseUrl = 'https://<tuo-backend>.onrender.com/api/piatti';
+Avvio in locale
+bash
+Copia codice
+npm install
+npm start        # alias di ng serve
+# apri http://localhost:4200
+Build
+bash
+Copia codice
+ng build --configuration production
+# output: dist/ristorante-client/browser
+Routing principale
+/ → home con categorie
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+/piatti/:categoria → lista piatti per categoria
 
-```bash
-ng generate component component-name
-```
+/piatto/:id → dettaglio di un piatto
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+/conto → form conto (se presente nel progetto)
 
-```bash
-ng generate --help
-```
+Immagini
+Le immagini dei piatti sono in src/assets/img/.
+Assicurati che i nomi file coincidano con il campo immagine proveniente dal backend.
 
-## Building
+Stile/tema
+Lo sfondo e le card sono personalizzati in src/styles.css.
+Esempio: classi tema .theme-latte, .theme-salvia, .theme-toscana.
+Se vuoi cambiare tema, imposta la classe desiderata sull’<body> in src/index.html.
 
-To build the project run:
+Collegamenti
+Backend (Spring Boot): [aggiungi qui l’URL dopo il deploy]
 
-```bash
-ng build
-```
+Endpoint base BE: /api/piatti
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+GET /api/piatti – tutti i piatti
 
-## Running unit tests
+GET /api/piatti/ordered – ordinati (per “conto”)
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+GET /api/piatti/{id} – dettaglio
 
-```bash
-ng test
-```
+GET /api/piatti/categoria/{categoria} – filtro
 
-## Running end-to-end tests
+CORS
+Il backend espone CORS centralizzato. In locale apri normalmente http://localhost:4200 e http://localhost:8080.
+In produzione assicurati che l’origine del frontend sia whitelista in BE (variabile APP_CORS_ORIGINS).
 
-For end-to-end (e2e) testing, run:
+Script utili (package.json)
+npm start → sviluppo
 
-```bash
-ng e2e
-```
+ng build --configuration production → build prod
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Troubleshooting
+Schermata vuota: controlla la console del browser per errori di CORS o URL API errato.
 
-## Additional Resources
+Immagini non caricate: verifica il path assets/img/ e i nomi file.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Errore 404 su /piatti/...: controlla le rotte e i routerLink.
+
+Questo progetto è stato generato con Angular CLI e poi personalizzato per l’app “Ristorante”.
