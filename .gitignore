@@ -1,15 +1,11 @@
-﻿# Node / Angular
+﻿# Angular/Node
 node_modules/
 dist/
 .angular/
-tmp/
-coverage/
+.git-credentials
+.env
+.env.*.local
 
-# OS / editor
+# OS
 .DS_Store
 Thumbs.db
-
-# IDE
-.vscode/
-.idea/
-*.iml

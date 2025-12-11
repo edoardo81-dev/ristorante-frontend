@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Piatto } from '../models/piatto.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PiattoService {
-  private baseUrl = 'http://localhost:8080/api/piatti';
-
+// src/app/services/piatto.service.ts
+private baseUrl = `${environment.apiBase}/piatti`;
   constructor(private http: HttpClient) {}
 
   /** Tutti i piatti (non garantito ordinamento lato BE) */
