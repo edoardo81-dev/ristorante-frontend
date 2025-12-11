@@ -1,87 +1,138 @@
-# Ristorante – Frontend (Angular)
 
-Interfaccia utente del menù ristorante. Consuma le API REST del backend Spring Boot.
+# 🍽️ Ristorante – Frontend (Angular)
 
-## Stack
+Interfaccia utente del menù ristorante.  
+Consuma le API REST del backend Spring Boot.
+
+---
+
+## 🚀 Deploy online (Render)
+
+Frontend LIVE:  
+👉 **https://ristorante-frontend-d1gp.onrender.com**
+
+Backend LIVE (collegato):  
+👉 **https://ristorante-backend-8awh.onrender.com**
+
+API base:
+
+https://ristorante-backend-8awh.onrender.com/api/piatti
+
+---
+
+## 🛠 Stack
+
 - Angular 17/20 (standalone components)
 - Bootstrap 5
-- RxJS/HttpClient
+- RxJS + HttpClient
 
-## Funzionalità
-- Home con categorie (Primi, Secondi, Dolci, Bevande)
-- Lista piatti per categoria
-- Dettaglio piatto con ingredienti
-- Form “conto” (carrello leggero) con piatti ordinati per categoria → nome
-- Tema grafico con sfondo personalizzato e card uniformi
+---
 
-## Requisiti
-- Node.js 18+
-- Angular CLI
+## 🍕 Funzionalità
 
-## Configurazione API
-Per lo sviluppo locale, il servizio punta al backend su `http://localhost:8080`.
+- Home con categorie (Primi, Secondi, Dolci, Bevande)  
+- Lista piatti filtrata per categoria  
+- Dettaglio piatto con ingredienti  
+- Form "conto" (carrello leggero)  
+- Tema grafico personalizzato  
+- Immagini e card uniformi  
 
-File: `src/app/services/piatto.service.ts`
-```ts
+---
+
+## 📦 Requisiti
+
+- Node.js **18+**
+- Angular CLI installata:
+
+
+npm install -g @angular/cli
+🔗 Configurazione API
+src/app/services/piatto.service.ts:
+
+ts
+
+// Locale
 private baseUrl = 'http://localhost:8080/api/piatti';
-// Dopo il deploy del backend su Render, sostituisci con l'URL pubblico, es.:
-// private baseUrl = 'https://<tuo-backend>.onrender.com/api/piatti';
-Avvio in locale
-bash
-Copia codice
+
+// Produzione (Render)
+private baseUrl = 'https://ristorante-backend-8awh.onrender.com/api/piatti';
+▶️ Avvio in locale
+
 npm install
-npm start        # alias di ng serve
-# apri http://localhost:4200
-Build
-bash
-Copia codice
+npm start   # alias di ng serve
+App disponibile su:
+
+
+http://localhost:4200
+🏗 Build produzione
+
 ng build --configuration production
-# output: dist/ristorante-client/browser
-Routing principale
-/ → home con categorie
+Output:
 
-/piatti/:categoria → lista piatti per categoria
 
-/piatto/:id → dettaglio di un piatto
+dist/ristorante-client/browser
+🗺️ Routing principale
+Rotta	Descrizione
+/	Home con categorie
+/piatti/:categoria	Lista piatti filtrata
+/piatto/:id	Dettaglio
+/conto	Form conto (se presente)
 
-/conto → form conto (se presente nel progetto)
+🖼️ Immagini
+Percorso:
 
-Immagini
-Le immagini dei piatti sono in src/assets/img/.
-Assicurati che i nomi file coincidano con il campo immagine proveniente dal backend.
+src/assets/img/
+Il nome file deve coincidere con il campo immagine del backend.
 
-Stile/tema
-Lo sfondo e le card sono personalizzati in src/styles.css.
-Esempio: classi tema .theme-latte, .theme-salvia, .theme-toscana.
-Se vuoi cambiare tema, imposta la classe desiderata sull’<body> in src/index.html.
+🎨 Tema grafico
+In src/styles.css:
 
-Collegamenti
-Backend (Spring Boot): [aggiungi qui l’URL dopo il deploy]
+.theme-latte
 
-Endpoint base BE: /api/piatti
+.theme-salvia
 
-GET /api/piatti – tutti i piatti
+.theme-toscana
 
-GET /api/piatti/ordered – ordinati (per “conto”)
+Imposta tema in src/index.html → <body class="theme-latte">.
 
-GET /api/piatti/{id} – dettaglio
+🔌 Collegamenti al Backend
+Backend:
+https://ristorante-backend-8awh.onrender.com
 
-GET /api/piatti/categoria/{categoria} – filtro
+API base:
+/api/piatti
 
-CORS
-Il backend espone CORS centralizzato. In locale apri normalmente http://localhost:4200 e http://localhost:8080.
-In produzione assicurati che l’origine del frontend sia whitelista in BE (variabile APP_CORS_ORIGINS).
+GET /api/piatti
 
-Script utili (package.json)
+GET /api/piatti/ordered
+
+GET /api/piatti/{id}
+
+GET /api/piatti/categoria/{categoria}
+
+🌍 CORS
+Il backend già permette richieste da:
+
+http://localhost:4200
+
+https://ristorante-frontend-d1gp.onrender.com
+
+Gestito tramite env var:
+
+APP_CORS_ORIGINS
+📜 Script utili (package.json)
 npm start → sviluppo
 
 ng build --configuration production → build prod
 
-Troubleshooting
-Schermata vuota: controlla la console del browser per errori di CORS o URL API errato.
+🛠 Troubleshooting
+Schermata vuota
+→ Controlla errori CORS o URL API errato (DevTools → Network)
 
-Immagini non caricate: verifica il path assets/img/ e i nomi file.
+Immagini non caricate
+→ Verifica path assets/img/ e nomi file
 
-Errore 404 su /piatti/...: controlla le rotte e i routerLink.
+Errore 404 sulle rotte
+→ Controlla routerLink e parametri
 
 Questo progetto è stato generato con Angular CLI e poi personalizzato per l’app “Ristorante”.
