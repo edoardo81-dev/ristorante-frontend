@@ -1,11 +1,18 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { combineLatest, map } from 'rxjs';
+import { combineLatest, map, startWith, catchError, of } from 'rxjs';
 
 import { PiattoService } from '../../services/piatto.service';
 import { CartService } from '../../services/cart.service';
 import { Piatto } from '../../models/piatto.model';
+
+type Vm = {
+  piatti: Piatto[];
+  currentCat: string | null;
+  loading: boolean;
+  error: string | null;
+};
 
 @Component({
   selector: 'app-piatti-list',
@@ -19,23 +26,59 @@ export class PiattiListComponent {
   private cart = inject(CartService);
   private route = inject(ActivatedRoute);
 
-  // menu (cache) dal service
-  piatti$ = this.piattoService.getMenu();
+  // cache dal service
+  piatti$ = this.piattoService.getMenu().pipe(
+    catchError(() =>
+      of([] as Piatto[])
+    )
+  );
 
-  // ✅ categoria dalla URL: /categoria/:categoria
   selectedCat$ = this.route.paramMap.pipe(
-    map(params => params.get('categoria'))
+    map(params => params.get('categoria')),
+    startWith(null)
   );
 
   categorie$ = this.piatti$.pipe(
     map(list => Array.from(new Set(list.map(p => p.categoria))))
   );
 
-  filtered$ = combineLatest([this.piatti$, this.selectedCat$]).pipe(
-    map(([list, cat]) => {
-      if (!cat) return list; // non dovrebbe mai servire ora, ma lo lasciamo safe
-      return list.filter(p => p.categoria === cat);
-    })
+  // ✅ ViewModel con loader + error
+  vm$ = combineLatest([
+    this.piatti$.pipe(startWith(null as unknown as Piatto[])),
+    this.selectedCat$
+  ]).pipe(
+    map(([list, cat]): Vm => {
+      // finché list è null => loading
+      if (list === null) {
+        return {
+          piatti: [],
+          currentCat: cat,
+          loading: true,
+          error: null
+        };
+      }
+
+      // se arriva lista vuota potrebbe essere:
+      // - backend down
+      // - cold start lungo
+      // - nessun piatto (improbabile)
+      const filtered = cat ? list.filter(p => p.categoria === cat) : list;
+
+      return {
+        piatti: filtered,
+        currentCat: cat,
+        loading: false,
+        error: null
+      };
+    }),
+    catchError(() =>
+      of({
+        piatti: [],
+        currentCat: null,
+        loading: false,
+        error: 'Il backend sta impiegando troppo tempo a rispondere. Riprova tra pochi secondi.'
+      } as Vm)
+    )
   );
 
   add(p: Piatto) {

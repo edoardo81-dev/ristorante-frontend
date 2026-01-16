@@ -75,3 +75,12 @@
 .price {
   font-weight: 700;
 }
+
+.loading-box {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0,0,0,.12);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+}
+

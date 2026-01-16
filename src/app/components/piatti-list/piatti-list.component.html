@@ -1,60 +1,76 @@
 <div class="container py-3">
   <div class="mb-3 header-box">
     <h2 class="m-0 text-dark">Menù</h2>
-    <div class="small text-muted">
+    <div class="small text-secondary">
       Scegli una categoria e aggiungi i piatti al conto.
     </div>
   </div>
 
-  <div class="cat-row mb-3" *ngIf="(selectedCat$ | async) as currentCat">
-    <ng-container *ngIf="(categorie$ | async) as cats">
-      <a
-        *ngFor="let c of cats"
-        class="btn btn-outline-dark btn-sm"
-        [routerLink]="['/categoria', c]"
-        [class.active]="currentCat === c"
-      >
-        {{ c }}
-      </a>
-    </ng-container>
-  </div>
+  <!-- BOTTONI CATEGORIE -->
+  <ng-container *ngIf="(vm$ | async) as vm">
+    <div class="cat-row mb-3">
+      <ng-container *ngIf="(categorie$ | async) as cats">
+        <a
+          *ngFor="let c of cats"
+          class="btn btn-outline-dark btn-sm"
+          [routerLink]="['/categoria', c]"
+          [class.active]="vm.currentCat === c"
+        >
+          {{ c }}
+        </a>
+      </ng-container>
+    </div>
 
-  <!-- LISTA PIATTI -->
-  <div class="grid" *ngIf="(filtered$ | async) as piatti">
-<div class="card piatto-card" *ngFor="let p of piatti">
-      <!-- ✅ FOTO (bevande non tagliate) -->
-      <div
-        *ngIf="imgSrc(p) as src"
-        class="img-box"
-        [class.bevande]="p.categoria === 'Bevande'"
-      >
-        <img [src]="src" alt="Immagine piatto" />
+    <!-- ✅ LOADER -->
+    <div class="loading-box" *ngIf="vm.loading">
+      <div class="spinner-border" role="status" aria-label="Caricamento"></div>
+      <div class="mt-2 fw-bold">Sto preparando il menù...</div>
+      <div class="small text-secondary mt-1">
+        Il primo accesso può richiedere un po’ (Render deve “svegliare” il server).
       </div>
+    </div>
 
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-start gap-2">
-          <div>
-            <div class="fw-bold text-dark">{{ p.nome }}</div>
-            <div class="small text-muted">{{ p.categoria }}</div>
+    <!-- ✅ ERRORE -->
+    <div class="alert alert-danger" *ngIf="!vm.loading && vm.error">
+      {{ vm.error }}
+    </div>
+
+    <!-- LISTA PIATTI -->
+    <div class="grid" *ngIf="!vm.loading && !vm.error">
+      <div class="card border-secondary" *ngFor="let p of vm.piatti">
+        <div
+          *ngIf="imgSrc(p) as src"
+          class="img-box"
+          [class.bevande]="p.categoria === 'Bevande'"
+        >
+          <img [src]="src" alt="Immagine piatto" />
+        </div>
+
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <div>
+              <div class="fw-bold">{{ p.nome }}</div>
+              <div class="small text-secondary">{{ p.categoria }}</div>
+            </div>
+
+            <div class="price">€{{ p.prezzo | number:'1.2-2' }}</div>
           </div>
 
-          <div class="price text-dark">€{{ p.prezzo | number:'1.2-2' }}</div>
-        </div>
+          <div class="small mt-2 text-secondary" *ngIf="p.descrizione">
+            {{ p.descrizione }}
+          </div>
 
-        <div class="small mt-2 text-muted" *ngIf="p.descrizione">
-          {{ p.descrizione }}
-        </div>
+          <div class="actions mt-3 d-flex gap-2">
+            <a class="btn btn-outline-dark btn-sm" [routerLink]="['/piatti', p.id]">
+              Dettagli
+            </a>
 
-        <div class="actions mt-3 d-flex gap-2">
-          <a class="btn btn-outline-dark btn-sm" [routerLink]="['/piatti', p.id]">
-            Dettagli
-          </a>
-
-          <button class="btn btn-warning btn-sm" (click)="add(p)">
-            + Aggiungi
-          </button>
+            <button class="btn btn-warning btn-sm" (click)="add(p)">
+              + Aggiungi
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </ng-container>
 </div>
