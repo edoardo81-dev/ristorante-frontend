@@ -1,30 +1,43 @@
-<div *ngIf="piatto; else noData">
-  <div class="row">
-    <div class="col-md-4">
-      <img *ngIf="piatto.immagine" [src]="'assets/img/' + piatto.immagine" class="img-fluid" alt="{{piatto.nome}}">
+<div class="container py-3" *ngIf="(piatto$ | async) as p">
+
+  <!-- ✅ Torna al menù (blu) -->
+  <a class="btn btn-primary btn-sm back-btn mb-3" routerLink="/categoria/Primi">
+    ← Torna al menù
+  </a>
+
+  <!-- ✅ Card più piccola e leggibile -->
+  <div class="card detail-card">
+    <div
+      *ngIf="imgSrc(p) as src"
+      class="detail-img-box"
+      [class.bevande]="p.categoria === 'Bevande'"
+    >
+      <img [src]="src" alt="Immagine piatto" />
     </div>
-    <div class="col-md-8">
-      <h3>{{ piatto.nome }}</h3>
-      <p><strong>Categoria:</strong> {{ piatto.categoria }}</p>
-      <p><strong>Prezzo:</strong> €{{ piatto.prezzo | number:'1.2-2' }}</p>
 
-      <h5>Ingredienti</h5>
-      <ul>
-        <li *ngFor="let ing of (piatto.ingredienti || [])">{{ ing }}</li>
-      </ul>
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-start gap-2">
+        <div>
+          <h2 class="m-0 detail-title">{{ p.nome }}</h2>
+          <div class="text-muted">{{ p.categoria }}</div>
+        </div>
+        <div class="price">€{{ p.prezzo | number:'1.2-2' }}</div>
+      </div>
 
-      <div class="d-flex gap-2">
-<a
-  class="btn btn-primary btn-sm"
-  [routerLink]="['/piatti', categoria || 'Primi']"
->
-  Torna indietro
-</a>
-</div>
+      <p class="mt-3 mb-2 text-muted" *ngIf="p.descrizione">
+        {{ p.descrizione }}
+      </p>
+
+      <div class="mt-3" *ngIf="p.ingredienti">
+        <div class="fw-bold mb-1">Ingredienti</div>
+        <div class="text-muted">{{ p.ingredienti }}</div>
+      </div>
+
+      <div class="mt-4">
+        <button class="btn btn-warning btn-sm" (click)="add(p)">
+          + Aggiungi al conto
+        </button>
+      </div>
     </div>
   </div>
 </div>
-
-<ng-template #noData>
-  <p>Piatto non trovato.</p>
-</ng-template>

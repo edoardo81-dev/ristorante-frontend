@@ -1,0 +1,49 @@
+:host {
+  display: block;
+}
+
+/* ✅ DESKTOP: lasciamo tutto come sta (quasi nessun override) */
+.card-ghost {
+  background: rgba(0,0,0,0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+}
+
+/* ✅ MOBILE FIX (solo sotto 768px) */
+@media (max-width: 768px) {
+
+  /* container più “app-like” */
+  .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  /* titolo più piccolo e leggibile */
+  h1.display-5 {
+    font-size: 1.6rem;
+    line-height: 1.2;
+    margin-bottom: 16px !important;
+  }
+
+  /* immagine: blocco compatto */
+  .home-img {
+    width: 100%;
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  /* card ghost: su mobile lo rendiamo chiaro così non “sporca” lo sfondo */
+  .card-ghost {
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* bottoni più comodi da tappare */
+  .btn.btn-primary {
+    padding: 14px 10px !important;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+}

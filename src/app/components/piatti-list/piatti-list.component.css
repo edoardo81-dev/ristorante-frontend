@@ -1,0 +1,77 @@
+.img-box.bevande img {
+  object-fit: contain;
+}
+
+.img-box.bevande {
+  background: rgba(0, 0, 0, 0.03);
+}
+/* ✅ griglia ben spaziata */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;                /* più spazio = card non attaccate */
+  align-items: stretch;
+}
+
+/* su tablet 2 colonne */
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* su desktop 3 colonne */
+@media (min-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ✅ card “stabile” e uniforme */
+.piatto-card {
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;             /* tutte alte uguali */
+}
+
+/* ✅ box immagine identico per tutti */
+.img-box {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+/* ✅ immagine sempre stessa dimensione */
+.img-box img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ✅ SOLO bevande: niente taglio */
+.img-box.bevande img {
+  object-fit: contain;
+}
+
+/* ✅ corpo card: layout più bello e pulsanti sempre in basso */
+.piatto-card .card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* ✅ azioni sempre in fondo alla card */
+.actions {
+  margin-top: auto;
+}
+
+/* prezzo */
+.price {
+  font-weight: 700;
+}

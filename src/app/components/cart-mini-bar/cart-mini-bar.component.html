@@ -1,0 +1,14 @@
+<div class="cart-mini d-md-none" *ngIf="(itemsCount$ | async) as count">
+  <div class="cart-mini__inner" *ngIf="count > 0">
+    <div class="cart-mini__left">
+      <div class="cart-mini__count">Articoli: <strong>{{ count }}</strong></div>
+      <div class="cart-mini__total">
+        Totale: <strong>€{{ (total$ | async) | number:'1.2-2' }}</strong>
+      </div>
+    </div>
+
+    <button class="btn btn-warning cart-mini__btn" (click)="goToConto()">
+      Conto
+    </button>
+  </div>
+</div>

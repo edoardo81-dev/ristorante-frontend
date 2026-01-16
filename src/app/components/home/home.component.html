@@ -1,19 +1,25 @@
-<h1 class="mb-4 text-center fw-bold display-3">Benvenuto al ristorante di Edoardo</h1>
+<div class="container py-3">
+  <h1 class="mb-4 text-center fw-bold display-5 text-dark">
+    Benvenuto al ristorante di Edoardo
+  </h1>
 
-<img src="assets/img/albero_sordi_mangia_maccheroni.jpg"
-     alt="Albero Sordi mangia i maccheroni"
-     class="img-fluid d-block mx-auto"
-     style="max-width: 600px;">
+  <img
+    src="assets/img/albero_sordi_mangia_maccheroni.jpg"
+    alt="Albero Sordi mangia i maccheroni"
+    class="img-fluid d-block mx-auto rounded shadow home-img"
+    style="max-width: 600px;"
+  />
 
-<h2 class="mt-4 mb-3 text-center">Seleziona una categoria</h2>
+  <h2 class="mt-4 mb-3 text-center text-dark">Seleziona una categoria</h2>
 
-<div class="row g-3">
-  <div class="col-md-3" *ngFor="let cat of categorie">
-    <div class="card card-ghost text-center">
-      <div class="card-body">
-        <a class="btn btn-primary w-100 py-3" [routerLink]="['/piatti', cat]">
-          {{ cat }}
-        </a>
+  <div class="row g-3">
+    <div class="col-6 col-md-3" *ngFor="let cat of categorie">
+      <div class="card card-ghost text-center h-100">
+        <div class="card-body d-flex align-items-center justify-content-center">
+          <a class="btn btn-primary w-100 py-3" [routerLink]="['/categoria', cat]">
+            {{ cat }}
+          </a>
+        </div>
       </div>
     </div>
   </div>

@@ -1,6 +1,16 @@
-/* altezza piena per far vedere lo sfondo */
-html, body, app-root { height: 100%; }
-body { margin: 0; }
+html, body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+app-root {
+  display: block;
+  min-height: 100vh;
+}
 
 /* =========== TEMI SFONDO =========== */
 
@@ -19,6 +29,8 @@ body { margin: 0; }
       transparent 0 2px,
       var(--bg-3) 2px 3px
     ) !important;
+    background-repeat: no-repeat;
+  background-size: cover;
   color: #2a2a2a;
 }
 
@@ -37,6 +49,8 @@ body { margin: 0; }
       transparent 0 2px,
       var(--bg-3) 2px 3px
     ) !important;
+    background-repeat: no-repeat;
+  background-size: cover;
   color: #1f2e26;
 }
 
@@ -55,6 +69,8 @@ body { margin: 0; }
       transparent 0 2px,
       var(--bg-3) 2px 3px
     ) !important;
+    background-repeat: no-repeat;
+  background-size: cover;
   color: #2b2b2b;
 }
 

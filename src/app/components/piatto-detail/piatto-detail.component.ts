@@ -1,35 +1,38 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { CommonModule, NgIf } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+
 import { PiattoService } from '../../services/piatto.service';
+import { CartService } from '../../services/cart.service';
+import { switchMap } from 'rxjs';
 import { Piatto } from '../../models/piatto.model';
 
 @Component({
   selector: 'app-piatto-detail',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, NgIf, RouterModule],
   templateUrl: './piatto-detail.component.html',
-  styles: []
+  styleUrls: ['./piatto-detail.component.css']
 })
-export class PiattoDetailComponent implements OnInit {
-  piatto?: Piatto;
-  categoria: string = '';
+export class PiattoDetailComponent {
+  private route = inject(ActivatedRoute);
+  private piattoService = inject(PiattoService);
+  private cart = inject(CartService);
 
-  constructor(
-    private route: ActivatedRoute,
-    private piattoService: PiattoService
-  ) {}
+  piatto$ = this.route.paramMap.pipe(
+    switchMap(params => this.piattoService.getById(Number(params.get('id'))))
+  );
 
-  ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.piattoService.getById(id).subscribe(p => this.piatto = p);
-    }
+  add(p: Piatto) {
+    this.cart.addToCart(p, 1);
+  }
 
-    // Recupera la categoria dai query params
-    const cat = this.route.snapshot.queryParamMap.get('categoria');
-    if (cat) {
-      this.categoria = cat;
-    }
+  imgSrc(p: Piatto): string | null {
+    if (!p.immagine) return null;
+
+    const img = p.immagine.trim();
+    if (img.startsWith('http') || img.startsWith('assets/')) return img;
+
+    return `assets/img/${img}`;
   }
 }

@@ -1,0 +1,31 @@
+.cart-mini {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 12px;
+  z-index: 9999;
+}
+
+.cart-mini__inner {
+  background: rgba(0,0,0,.75);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #fff;
+}
+
+.cart-mini__left {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.cart-mini__btn {
+  border-radius: 12px;
+  font-weight: 700;
+}

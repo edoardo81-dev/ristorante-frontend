@@ -1,0 +1,57 @@
+.app-header {
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.app-main {
+  min-height: calc(100vh - 56px);
+  padding: 12px 0 80px; /* spazio sotto per mini-bar mobile */
+}
+
+/* ✅ badge sul bottone conto: SOLO desktop */
+.conto-btn {
+  position: relative;
+}
+
+/* Desktop: aggiunge spazio e mostra badge */
+@media (min-width: 900px) {
+  .conto-btn {
+    padding-right: 12px;
+  }
+
+  .conto-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+
+    border-radius: 999px;
+    background: #111;
+    color: #fff;
+
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 20px;
+    text-align: center;
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Mobile: NON cambia nulla, badge nascosto e niente padding extra */
+@media (max-width: 899px) {
+  .conto-badge {
+    display: none;
+  }
+}

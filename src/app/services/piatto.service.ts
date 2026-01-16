@@ -1,49 +1,72 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, shareReplay, take} from 'rxjs';
+
 import { Piatto } from '../models/piatto.model';
-import { environment } from '../../environments/environment';
+import { API_BASE } from '../config/api';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PiattoService {
-// src/app/services/piatto.service.ts
-private baseUrl = `${environment.apiBase}/piatti`;
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
+  private baseUrl = `${API_BASE}/piatti`;
+
+  // ✅ cache inizializzata "lazy" per evitare http undefined nei field initializer
+  private menuCache$?: Observable<Piatto[]>;
 
   /** Tutti i piatti (non garantito ordinamento lato BE) */
   getAll(): Observable<Piatto[]> {
     return this.http.get<Piatto[]>(this.baseUrl);
   }
 
-  /** Tutti i piatti già ordinati (categorie: Primi→Secondi→Dolci→Bevande, poi nome) */
+  /** Tutti i piatti ordinati */
   getOrdered(): Observable<Piatto[]> {
-    return this.http.get<Piatto[]>(`${this.baseUrl}/ordered`);
+    return this.http.get<Piatto[]>(this.baseUrl).pipe(
+      map(list => this.sortMenu(list))
+    );
+  }
+
+  /** ✅ Metodo usato dal PiattiListComponent (con cache) */
+  getMenu(): Observable<Piatto[]> {
+    if (!this.menuCache$) {
+      this.menuCache$ = this.getOrdered().pipe(
+        shareReplay({ bufferSize: 1, refCount: false })
+      );
+    }
+    return this.menuCache$;
+  }
+
+  /** Warmup opzionale */
+  preload(): void {
+    this.getMenu().pipe(take(1)).subscribe({
+      next: () => {},
+      error: () => {}
+    });
   }
 
   getById(id: number): Observable<Piatto> {
     return this.http.get<Piatto>(`${this.baseUrl}/${id}`);
   }
 
-  /** Piatti di una categoria (se il BE non li ordina, li ordiniamo qui per nome) */
   getByCategoria(categoria: string): Observable<Piatto[]> {
-    return this.http.get<Piatto[]>(`${this.baseUrl}/categoria/${encodeURIComponent(categoria)}`)
-      .pipe(map(list => [...list].sort((a, b) => a.nome.localeCompare(b.nome, undefined, {sensitivity: 'base'}))));
-  }
-
-  /** Estrae le categorie uniche a runtime */
-  getCategories(): Observable<string[]> {
-    return this.getAll().pipe(
-      map(piatti => Array.from(new Set(piatti.map(p => p.categoria))).sort())
+    return this.getMenu().pipe(
+      map(list => list.filter(p => p.categoria === categoria))
     );
   }
 
-  create(piatto: Piatto) {
-    return this.http.post<Piatto>(this.baseUrl, piatto);
-  }
+  private sortMenu(list: Piatto[]): Piatto[] {
+    const order = ['Primi', 'Secondi', 'Dolci', 'Bevande'];
+    const idx = (c: string) => {
+      const i = order.indexOf(c);
+      return i === -1 ? 999 : i;
+    };
 
-  delete(id: number) {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return [...list].sort((a, b) => {
+      const d = idx(a.categoria) - idx(b.categoria);
+      if (d !== 0) return d;
+      return a.nome.localeCompare(b.nome, undefined, { sensitivity: 'base' });
+    });
   }
 }

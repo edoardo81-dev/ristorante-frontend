@@ -1,26 +1,58 @@
-<h2>Piatti - {{ categoria }}</h2>
+<div class="container py-3">
+  <div class="mb-3 header-box">
+    <h2 class="m-0 text-dark">Menù</h2>
+    <div class="small text-muted">
+      Scegli una categoria e aggiungi i piatti al conto.
+    </div>
+  </div>
 
-<div *ngIf="piatti.length === 0">Nessun piatto trovato per questa categoria.</div>
+  <div class="cat-row mb-3" *ngIf="(selectedCat$ | async) as currentCat">
+    <ng-container *ngIf="(categorie$ | async) as cats">
+      <a
+        *ngFor="let c of cats"
+        class="btn btn-outline-dark btn-sm"
+        [routerLink]="['/categoria', c]"
+        [class.active]="currentCat === c"
+      >
+        {{ c }}
+      </a>
+    </ng-container>
+  </div>
 
-<div class="row g-3">
-  <div class="col-md-6 col-lg-4" *ngFor="let p of piatti">
-    <div class="card h-100">
-      <!-- Contenitore immagine a dimensione uniforme -->
-      <div class="thumb-wrap" *ngIf="p.immagine">
-        <img [src]="'assets/img/' + p.immagine" [alt]="p.nome">
+  <!-- LISTA PIATTI -->
+  <div class="grid" *ngIf="(filtered$ | async) as piatti">
+<div class="card piatto-card" *ngFor="let p of piatti">
+      <!-- ✅ FOTO (bevande non tagliate) -->
+      <div
+        *ngIf="imgSrc(p) as src"
+        class="img-box"
+        [class.bevande]="p.categoria === 'Bevande'"
+      >
+        <img [src]="src" alt="Immagine piatto" />
       </div>
 
-      <div class="card-body d-flex flex-column">
-        <h5 class="card-title">{{ p.nome }}</h5>
-        <p class="card-text mb-1">Prezzo: €{{ p.prezzo | number:'1.2-2' }}</p>
-        <div class="mt-auto">
-          <a
-            class="btn btn-primary btn-sm"
-            [routerLink]="['/piatto', p.id]"
-            [queryParams]="{ categoria: categoria }"
-          >
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-start gap-2">
+          <div>
+            <div class="fw-bold text-dark">{{ p.nome }}</div>
+            <div class="small text-muted">{{ p.categoria }}</div>
+          </div>
+
+          <div class="price text-dark">€{{ p.prezzo | number:'1.2-2' }}</div>
+        </div>
+
+        <div class="small mt-2 text-muted" *ngIf="p.descrizione">
+          {{ p.descrizione }}
+        </div>
+
+        <div class="actions mt-3 d-flex gap-2">
+          <a class="btn btn-outline-dark btn-sm" [routerLink]="['/piatti', p.id]">
             Dettagli
           </a>
+
+          <button class="btn btn-warning btn-sm" (click)="add(p)">
+            + Aggiungi
+          </button>
         </div>
       </div>
     </div>

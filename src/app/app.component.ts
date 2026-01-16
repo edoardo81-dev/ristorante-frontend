@@ -1,39 +1,22 @@
-import { Component } from '@angular/core';
-import { RouterOutlet, RouterModule } from '@angular/router';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { map } from 'rxjs';
+
+import { CartMiniBarComponent } from './components/cart-mini-bar/cart-mini-bar.component';
+import { CartService } from './services/cart.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterModule, RouterOutlet],
-  template: `
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-      <div class="container-fluid">
-        <a class="navbar-brand" routerLink="/">Ristorante</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" 
-                aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" routerLink="/conto">Calcola Conto</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      <router-outlet></router-outlet>
-    </div>
-  `,
-  styles: []
+  imports: [CommonModule, RouterModule, CartMiniBarComponent],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Ristorante';
+  private cart = inject(CartService);
+
+  totalQty$ = this.cart.items$.pipe(
+    map(items => items.reduce((sum, i) => sum + i.quantity, 0))
+  );
 }

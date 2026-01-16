@@ -1,53 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { CartService, CartItem } from '../../services/cart.service';
-import { PiattoService } from '../../services/piatto.service';
-import { Piatto } from '../../models/piatto.model';
+
+import { CartService } from '../../services/cart.service';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-conto',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule],
   templateUrl: './conto.component.html',
-  styles: []
+  styleUrls: ['./conto.component.css']
 })
 export class ContoComponent {
-  items: CartItem[] = [];
-  piatti: Piatto[] = [];
-  selectedPiatto?: Piatto;
-  qty: number = 1;
+  private cart = inject(CartService);
 
-  constructor(private cart: CartService, private piattoService: PiattoService) {
-    this.cart.items$.subscribe(items => this.items = items);
+  items$ = this.cart.items$;
 
-    // usa l’endpoint ordinato per popolare la select
-    this.piattoService.getOrdered().subscribe(p => this.piatti = p);
+  total$ = this.cart.items$.pipe(
+    map(items => items.reduce((sum, it) => sum + it.piatto.prezzo * it.quantity, 0))
+  );
+
+  inc(it: any) {
+    this.cart.updateQuantity(it.piatto.id!, it.quantity + 1);
   }
 
-  addSelected() {
-    if (this.selectedPiatto) {
-      this.cart.addToCart(this.selectedPiatto, this.qty);
-      this.qty = 1;
-    } else {
-      alert('Seleziona un piatto');
-    }
+  dec(it: any) {
+    this.cart.updateQuantity(it.piatto.id!, it.quantity - 1);
   }
 
-  updateQuantity(item: CartItem, event: any) {
-    const q = Number(event.target.value);
-    this.cart.updateQuantity(item.piatto.id!, q);
-  }
-
-  remove(item: CartItem) {
-    this.cart.remove(item.piatto.id!);
+  remove(it: any) {
+    this.cart.remove(it.piatto.id!);
   }
 
   clear() {
     this.cart.clear();
-  }
-
-  get total(): number {
-    return this.cart.getTotal();
   }
 }

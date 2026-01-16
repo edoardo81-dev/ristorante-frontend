@@ -6,7 +6,13 @@ import { ContoComponent } from './components/conto/conto.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'piatti/:categoria', component: PiattiListComponent },
-  { path: 'piatto/:id', component: PiattoDetailComponent },
-  { path: 'conto', component: ContoComponent }
+
+  { path: 'menu', redirectTo: 'categoria/Primi', pathMatch: 'full' },
+
+  { path: 'categoria/:categoria', component: PiattiListComponent },
+
+  { path: 'piatti/:id', component: PiattoDetailComponent },
+  { path: 'conto', component: ContoComponent },
+
+  { path: '**', redirectTo: '' }
 ];

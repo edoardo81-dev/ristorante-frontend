@@ -1,8 +1,12 @@
 export interface Piatto {
-  id: number;
+  id?: number;
+
   nome: string;
-  categoria: string;   
-  immagine: string;    
-  prezzo: number;      
-  ingredienti: string[];
+  categoria: string;
+  prezzo: number;
+
+  // opzionali
+  descrizione?: string;
+  ingredienti?: string;
+  immagine?: string;
 }

@@ -7,9 +7,7 @@ export interface CartItem {
   quantity: number;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class CartService {
   private itemsSubject = new BehaviorSubject<CartItem[]>([]);
   items$ = this.itemsSubject.asObservable();
@@ -17,11 +15,8 @@ export class CartService {
   addToCart(piatto: Piatto, qty = 1) {
     const items = this.itemsSubject.getValue();
     const found = items.find(i => i.piatto.id === piatto.id);
-    if (found) {
-      found.quantity += qty;
-    } else {
-      items.push({ piatto, quantity: qty });
-    }
+    if (found) found.quantity += qty;
+    else items.push({ piatto, quantity: qty });
     this.itemsSubject.next([...items]);
   }
 
