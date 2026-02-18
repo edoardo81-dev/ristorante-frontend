@@ -4,4 +4,4 @@ const isLocalhost =
 
 export const API_BASE = isLocalhost
   ? 'http://localhost:8080/api'
-  : 'https://ristorante-backend-8awh.onrender.com/api';
+  : 'https://ristorante-backend-ka1l.onrender.com';
